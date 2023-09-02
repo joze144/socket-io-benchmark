@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: socket-io-benchmark
+  namespace: metrics
+  labels:
+    app: socket-io-benchmark
+    release: my-kube-prometheus-stack
+spec:
+  namespaceSelector:
+    matchNames:
+      - default
+  selector:
+    matchLabels:
+      app: socket-io-benchmark
+  endpoints:
+    - path: /metrics
+      port: http
+      interval: 15s
+      scrapeTimeout: 10s

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script>
+  const NUMBER_OF_ROOMS = 50;
+
+  const connectionPair = (index) => {
+    const socket = io('http://localhost:3000/', {
+      query: {
+        "room": `room${index}`
+      }
+    });
+    setInterval(() => {
+      socket.emit(`room${index}`, 'nice');
+    }, 3000)
+    socket.on('message', (d) => {})
+
+    const socket2 = io('http://localhost:3000/', {
+      query: {
+        "room": `room${index}`
+      }
+    });
+    socket2.on('message', (data) => {
+      setTimeout(() => {
+        socket2.emit(`room${index}`, 'funky');
+      }, 1000)
+    });
+  }
+
+  for (let i = 0; i < NUMBER_OF_ROOMS; i++) {
+    connectionPair(i);
+  }
+</script>
+</body>
+</html>
